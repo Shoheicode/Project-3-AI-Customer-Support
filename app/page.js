@@ -1,9 +1,10 @@
 'use client'
 
-import { Box, Button, Stack, TextField, Modal } from '@mui/material'
+import { Box, Button, Stack, TextField, Modal, AppBar, Toolbar, IconButton, Typography } from '@mui/material'
 import { useState } from 'react'
 import { firestore } from "@/app/firebase";
 import { collection, doc, getDoc, setDoc, addDoc } from 'firebase/firestore';
+import MenuIcon from '@mui/icons-material/Menu';
 
 export default function Home() {
   const [messages, setMessages] = useState([
@@ -122,6 +123,31 @@ export default function Home() {
       alignItems="center"
       sx={backgroundStyle}
     >
+      <AppBar 
+        position="static"
+      >
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            
+          </IconButton>
+        </Toolbar>
+        <Typography>
+          <MenuIcon>
+
+          </MenuIcon>
+        </Typography>
+        <Button
+          color="inherit"
+          href="/about">
+          Login
+        </Button>
+      </AppBar>
       <Modal
         open = {openReview}
         onClose={closeReviewWin}
@@ -253,6 +279,9 @@ export default function Home() {
         sx={styleButton}
       >
         ?
+      </Button>
+      <Button href = "/about">
+        hello
       </Button>
     </Box>
   )
