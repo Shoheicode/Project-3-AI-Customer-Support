@@ -4,7 +4,7 @@ import OpenAI from "openai";
 const systemPrompt = ""
 
 export async function POST(req){
-    console.log(process.env.OPEN_AI_API_KEY)
+    //console.log(process.env.OPEN_AI_API_KEY)
     const openai = new OpenAI({apiKey: process.env.OPEN_AI_API_KEY})
     const data = await req.json()
     console.log(systemPrompt)
