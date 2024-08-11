@@ -21,6 +21,12 @@ export default function Home() {
     transform: 'translate(-50%, -50%)',
   }
 
+  const backgroundStyle = {
+    //background: 'linear-gradient(rgba(250,0,0,0.5),transparent);',
+    background: 'rgb(10,0,184);',
+    background: 'radial-gradient(circle, rgba(10,0,184,1) 0%, rgba(168,168,255,1) 35%, rgba(0,255,150,1) 100%);'
+  }
+
   const textAreaStyle = {
     height: '100px'
   }
@@ -109,11 +115,12 @@ export default function Home() {
   return (
     <Box
       width="100vw"
-      height="100vh"
+      height="auto"
       display="flex"
       flexDirection="column"
       justifyContent="center"
       alignItems="center"
+      sx={backgroundStyle}
     >
       <Modal
         open = {openReview}
@@ -184,6 +191,7 @@ export default function Home() {
         width="500px"
         height="700px"
         border="1px solid black"
+        bgcolor= 'white'
         p={2}
         spacing={3}
       >
@@ -235,13 +243,12 @@ export default function Home() {
           </Button>
         </Stack>
       </Stack>
-      <Box height = "30px">
+      <Box height = "50px">
 
       </Box>
       <Button 
         variant="contained" 
         onClick={openReviewWin}
-        position='absolute' 
         //transform = 'translate(-100%, -100%)'  
         sx={styleButton}
       >
