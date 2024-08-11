@@ -1,7 +1,9 @@
 'use client'
 
-import { Box, Button, Stack, TextField } from '@mui/material'
+import { Box, Button, Stack, TextField, Modal } from '@mui/material'
 import { useState } from 'react'
+import { firestore } from "@/app/firebase";
+import { collection, doc, getDoc, setDoc, addDoc } from 'firebase/firestore';
 
 export default function Home() {
   const [messages, setMessages] = useState([
@@ -12,6 +14,20 @@ export default function Home() {
   ])
   const [message, setMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [questName, setQuestName] = useState('')
+  const [question, setQuestion] = useState('')
+
+  const style = {
+    transform: 'translate(-50%, -50%)',
+  }
+
+  const textAreaStyle = {
+    height: '100px'
+  }
+
+  const styleButton = {
+    transform: 'translate(0%, 0%)',
+  }
 
   const sendMessage = async () => {
     if (!message.trim() || isLoading) return; // don't send empty messages or while loading
@@ -65,12 +81,30 @@ export default function Home() {
     setIsLoading(false)
   }
 
+  const addQuestion = async (name, question) =>{
+    if (name == ''){
+      return;
+    }
+
+    const docRef = doc(collection(firestore, 'Question'), name)
+    const docSnap = await getDoc(docRef)
+    
+    await setDoc(docRef, {quest: question})
+    
+
+  }
+
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       sendMessage()
     }
   }
+
+  const [openReview, setOpenReview] = useState(false);
+
+  const openReviewWin = () => setOpenReview(true)
+  const closeReviewWin = () => setOpenReview(false)
 
   return (
     <Box
@@ -81,6 +115,70 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
     >
+      <Modal
+        open = {openReview}
+        onClose={closeReviewWin}
+      >
+        <Box
+          sx={style}
+          position='absolute' 
+          top='50%' 
+          left='50%' 
+          //transform = 'translate(-50%, -50%)'
+          width={400}
+          bgcolor= 'white'
+          border = "2px solid #000"
+          boxShadow={24}
+          p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+        >
+          <Stack 
+            width={300}
+            gap={3}
+          >
+          <h1>
+            What can we do to improve this site?
+          </h1>
+          <TextField
+              id="outlined-basic"
+              label="Name"
+              variant="outlined"
+              fullWidth ={true}
+              value={questName}
+              onChange={(e) => setQuestName(e.target.value)}
+            >
+              
+          </TextField>
+          <TextField
+              id="outlined-basic"
+              label="Question"
+              variant="outlined"
+              fullWidth ={true}
+              value={question}
+              sx={textAreaStyle}
+              onChange={(e) => setQuestion(e.target.value)}
+            >
+              
+            </TextField>
+            <Button 
+              variant="outlined"
+              onClick={ () => {
+                  addQuestion(questName, question)
+                  setQuestName('')
+                  setQuestion('')
+                  closeReviewWin()
+                }  
+              }
+            >
+              Send
+            </Button>
+          </Stack>
+
+        </Box>
+      </Modal>
+      
       <Stack
         direction={'column'}
         width="500px"
@@ -137,6 +235,18 @@ export default function Home() {
           </Button>
         </Stack>
       </Stack>
+      <Box height = "30px">
+
+      </Box>
+      <Button 
+        variant="contained" 
+        onClick={openReviewWin}
+        position='absolute' 
+        //transform = 'translate(-100%, -100%)'  
+        sx={styleButton}
+      >
+        ?
+      </Button>
     </Box>
   )
 }
