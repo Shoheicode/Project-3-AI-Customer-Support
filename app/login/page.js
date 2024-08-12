@@ -129,6 +129,8 @@ export default function Home() {
   const openReviewWin = () => setOpenReview(true)
   const closeReviewWin = () => setOpenReview(false)
 
+  const [link, setLink] = useState("");
+
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={closingDrawer}>
       <Stack
@@ -163,7 +165,7 @@ export default function Home() {
   return (
     <Box
       width="100vw"
-      height="auto"
+      height="100vh"
       display="flex"
       flexDirection="column"
       justifyContent="center"
@@ -171,7 +173,7 @@ export default function Home() {
       sx={backgroundStyle}
     >
       <AppBar 
-        position="static"
+        //position="static"
       >
         <Toolbar>
           <IconButton
@@ -200,138 +202,43 @@ export default function Home() {
       <Drawer open = {openDrawer} onClose={closingDrawer}>
           {DrawerList}
       </Drawer>
-      <Modal
-        open = {openReview}
-        onClose={closeReviewWin}
-      >
-        <Box
-          sx={style}
-          position='absolute' 
-          top='50%' 
-          left='50%' 
-          //transform = 'translate(-50%, -50%)'
-          width={400}
-          bgcolor= 'white'
-          border = "2px solid #000"
-          boxShadow={24}
-          p={4}
-          display="flex"
-          flexDirection="column"
-          gap={3}
-        >
-          <Stack 
-            width={300}
-            gap={3}
-          >
-          <h1>
-            What can we do to improve this site?
-          </h1>
-          <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              fullWidth ={true}
-              value={questName}
-              onChange={(e) => setQuestName(e.target.value)}
-            >
-              
-          </TextField>
-          <TextField
-              id="outlined-basic"
-              label="Question"
-              variant="outlined"
-              fullWidth ={true}
-              value={question}
-              sx={textAreaStyle}
-              onChange={(e) => setQuestion(e.target.value)}
-            >
-              
-            </TextField>
-            <Button 
-              variant="outlined"
-              onClick={ () => {
-                  addQuestion(questName, question)
-                  setQuestName('')
-                  setQuestion('')
-                  closeReviewWin()
-                }  
-              }
-            >
-              Send
-            </Button>
-          </Stack>
-
-        </Box>
-      </Modal>
       
-      <Stack
-        direction={'column'}
-        width="500px"
-        height="700px"
-        border="1px solid black"
-        bgcolor= 'white'
-        p={2}
-        spacing={3}
+      <Box
+        height={"25%"}
       >
-        <Stack
-          direction={'column'}
-          spacing={2}
-          flexGrow={1}
-          overflow="auto"
-          maxHeight="100%"
-        >
-          {messages.map((message, index) => (
-            <Box
-              key={index}
-              display="flex"
-              justifyContent={
-                message.role === 'assistant' ? 'flex-start' : 'flex-end'
-              }
-            >
-              <Box
-                bgcolor={
-                  message.role === 'assistant'
-                    ? 'primary.main'
-                    : 'secondary.main'
-                }
-                color="white"
-                borderRadius={16}
-                p={3}
-              >
-                {message.content}
-              </Box>
-            </Box>
-          ))}
-        </Stack>
-        <Stack direction={'row'} spacing={2}>
-          <TextField
-            label="Message"
-            fullWidth
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyPress}
-            
-          />
-          <Button 
-            variant="contained" 
-            onClick={sendMessage}
-            disabled = {isLoading}
-          >
-            {isLoading ? 'Sending' : 'Send'}
-          </Button>
-        </Stack>
-      </Stack>
-      <Box height = "50px">
 
       </Box>
-      <Button 
-        variant="contained" 
-        onClick={openReviewWin}
-        //transform = 'translate(-100%, -100%)'  
-        sx={styleButton}
+      
+      <Box
+        bgcolor={"white"}
+        width={400}
+        height={400}
+        display={"flex"}
+        justifyContent={"center"}
       >
-        ?
-      </Button>
+        <Stack
+        padding={10}
+          gap={3}
+        >
+          <TextField
+            label={"Email"}
+          >
+
+          </TextField>
+          <TextField
+            label="Password"
+          >
+
+          </TextField>
+          <Button
+            color='inherit'
+            variant='contained'
+          >
+            Submit
+          </Button>
+        </Stack>
+      </Box>
+
     </Box>
   )
 }
