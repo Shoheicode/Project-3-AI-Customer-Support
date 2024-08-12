@@ -1,10 +1,18 @@
 'use client'
 
-import { Box, Button, Stack, TextField, Modal, AppBar, Toolbar, IconButton, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Modal, AppBar, Toolbar, IconButton, Typography, Drawer } from '@mui/material'
 import { useState } from 'react'
 import { firestore } from "@/app/firebase";
 import { collection, doc, getDoc, setDoc, addDoc } from 'firebase/firestore';
+import List from '@mui/material/List';
 import MenuIcon from '@mui/icons-material/Menu';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
 
 export default function Home() {
   const [messages, setMessages] = useState([
@@ -17,6 +25,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [questName, setQuestName] = useState('')
   const [question, setQuestion] = useState('')
+  const [loggedIn, setLoggedIn] = useState(false)
+
+
 
   const style = {
     transform: 'translate(-50%, -50%)',
@@ -108,10 +119,45 @@ export default function Home() {
     }
   }
 
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const openingDrawer = () =>setOpenDrawer(true);
+  const closingDrawer = () =>setOpenDrawer(false);
+
   const [openReview, setOpenReview] = useState(false);
 
   const openReviewWin = () => setOpenReview(true)
   const closeReviewWin = () => setOpenReview(false)
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={closingDrawer}>
+      <List>
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  )
 
   return (
     <Box
@@ -132,22 +178,32 @@ export default function Home() {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
+            sx={{ 
+              mr: 2 
+            }}
+            onClick={openingDrawer}
           >
-            
+            <MenuIcon>
+            </MenuIcon>
           </IconButton>
-        </Toolbar>
-        <Typography>
-          <MenuIcon>
+          <Box
+            sx = {{
+              flexGrow: 1
+            }}
+          >
 
-          </MenuIcon>
-        </Typography>
-        <Button
-          color="inherit"
-          href="/about">
-          Login
-        </Button>
+          </Box>
+          <Button
+            color="inherit"
+            href="/about">
+            Login
+          </Button>
+        </Toolbar>
       </AppBar>
+      
+      <Drawer open = {openDrawer} onClose={closingDrawer}>
+          {DrawerList}
+      </Drawer>
       <Modal
         open = {openReview}
         onClose={closeReviewWin}
@@ -279,9 +335,6 @@ export default function Home() {
         sx={styleButton}
       >
         ?
-      </Button>
-      <Button href = "/about">
-        hello
       </Button>
     </Box>
   )
